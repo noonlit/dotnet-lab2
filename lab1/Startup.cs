@@ -18,88 +18,94 @@ using System.IO;
 
 namespace Lab1
 {
-  public class Startup
-  {
-    public Startup(IConfiguration configuration)
-    {
-      Configuration = configuration;
-    }
+	public class Startup
+	{
+		public Startup(IConfiguration configuration)
+		{
+			Configuration = configuration;
+		}
 
-    public IConfiguration Configuration { get; }
+		public IConfiguration Configuration { get; }
 
-    // This method gets called by the runtime. Use this method to add services to the container.
-    public void ConfigureServices(IServiceCollection services)
-    {
-      services.AddDbContext<ApplicationDbContext>(options =>
-          options.UseSqlServer(
-              Configuration.GetConnectionString("DefaultConnection")));
+		// This method gets called by the runtime. Use this method to add services to the container.
+		public void ConfigureServices(IServiceCollection services)
+		{
+			services.AddDbContext<ApplicationDbContext>(options =>
+					options.UseSqlServer(
+							Configuration.GetConnectionString("DefaultConnection")));
 
-      services.AddDatabaseDeveloperPageExceptionFilter();
+			services.AddDatabaseDeveloperPageExceptionFilter();
 
-      services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
-          .AddEntityFrameworkStores<ApplicationDbContext>();
+			services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+					.AddEntityFrameworkStores<ApplicationDbContext>();
 
-      services.AddIdentityServer()
-          .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
+			services.AddIdentityServer()
+					.AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
 
-      services.AddAuthentication()
-          .AddIdentityServerJwt();
-      services.AddControllersWithViews();
-      services.AddRazorPages();
-      // In production, the Angular files will be served from this directory
-      services.AddSpaStaticFiles(configuration =>
-      {
-        configuration.RootPath = "ClientApp/dist";
-      });
-    }
+			services.AddAuthentication()
+					.AddIdentityServerJwt();
+			services.AddControllersWithViews();
+			services.AddRazorPages();
+			// In production, the Angular files will be served from this directory
+			services.AddSpaStaticFiles(configuration =>
+			{
+				configuration.RootPath = "ClientApp/dist";
+			});
 
-    // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-    {
-      if (env.IsDevelopment())
-      {
-        app.UseDeveloperExceptionPage();
-        app.UseMigrationsEndPoint();
-      }
-      else
-      {
-        app.UseExceptionHandler("/Error");
-        // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-        app.UseHsts();
-      }
+			services.AddControllers()
+							.AddJsonOptions(options =>
+							{
+								options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+							});
+		}
 
-      app.UseHttpsRedirection();
-      app.UseStaticFiles();
-      if (!env.IsDevelopment())
-      {
-        app.UseSpaStaticFiles();
-      }
+		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+		{
+			if (env.IsDevelopment())
+			{
+				app.UseDeveloperExceptionPage();
+				app.UseMigrationsEndPoint();
+			}
+			else
+			{
+				app.UseExceptionHandler("/Error");
+				// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+				app.UseHsts();
+			}
 
-      app.UseRouting();
+			app.UseHttpsRedirection();
+			app.UseStaticFiles();
+			if (!env.IsDevelopment())
+			{
+				app.UseSpaStaticFiles();
+			}
 
-      app.UseAuthentication();
-      app.UseIdentityServer();
-      app.UseAuthorization();
-      app.UseEndpoints(endpoints =>
-      {
-        endpoints.MapControllerRoute(
-            name: "default",
-            pattern: "{controller}/{action=Index}/{id?}");
-        endpoints.MapRazorPages();
-      });
+			app.UseRouting();
 
-      app.UseSpa(spa =>
-      {
-        // To learn more about options for serving an Angular SPA from ASP.NET Core,
-        // see https://go.microsoft.com/fwlink/?linkid=864501
+			app.UseAuthentication();
+			app.UseIdentityServer();
+			app.UseAuthorization();
+			app.UseEndpoints(endpoints =>
+			{
+				endpoints.MapControllerRoute(
+						name: "default",
+						pattern: "{controller}/{action=Index}/{id?}");
+				endpoints.MapRazorPages();
+			});
 
-        spa.Options.SourcePath = "ClientApp";
+			app.UseSpa(spa =>
+			{
+				// To learn more about options for serving an Angular SPA from ASP.NET Core,
+				// see https://go.microsoft.com/fwlink/?linkid=864501
 
-        if (env.IsDevelopment())
-        {
-          spa.UseAngularCliServer(npmScript: "start");
-        }
-      });
-    }
-  }
+				spa.Options.SourcePath = "ClientApp";
+
+				if (env.IsDevelopment())
+				{
+					spa.UseAngularCliServer(npmScript: "start");
+				}
+			});
+		}
+	}
 }

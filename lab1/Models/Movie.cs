@@ -1,10 +1,12 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Lab1.Models
 {
 	public class Movie
 	{
+		[JsonConverter(typeof(JsonStringEnumConverter))]
 		public enum GenreType
 		{
 			Action, Comedy, Horror, Thriller
