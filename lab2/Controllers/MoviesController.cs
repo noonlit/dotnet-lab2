@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Lab2.Data;
 using Lab2.Models;
 using Microsoft.AspNetCore.Authorization;
+using AutoMapper;
+using Lab2.ViewModels;
 
 namespace Lab2.Controllers
 {
@@ -16,28 +18,32 @@ namespace Lab2.Controllers
 	public class MoviesController : ControllerBase
 	{
 		private readonly ApplicationDbContext _context;
+		private readonly IMapper _mapper;
 
-		public MoviesController(ApplicationDbContext context)
+		public MoviesController(ApplicationDbContext context, IMapper mapper)
 		{
 			_context = context;
+			_mapper = mapper;
 		}
 
 		// GET: api/Movies
 		[HttpGet]
-		public async Task<ActionResult<IEnumerable<Movie>>> GetMovies(string? startDate, string? endDate)
+		public async Task<ActionResult<IEnumerable<MovieViewModel>>> GetMovies(string? startDate, string? endDate)
 		{
 			// the first movie ever made was in 1888, so use this as a default first value
 			var startDateDt = startDate == null ? DateTime.Parse("01-01-1888") : DateTime.Parse(startDate);
 			var endDateDt = endDate == null ? DateTime.Now : DateTime.Parse(endDate);
 
-			return await _context.Movies
+			var movies = await _context.Movies
 				.Where(m => m.AddedAt >= startDateDt && m.AddedAt <= endDateDt)
 				.OrderByDescending(m => m.ReleaseYear).ToListAsync();
+
+			return _mapper.Map<List<Movie>, List<MovieViewModel>>(movies);
 		}
 
 		// GET: api/Movies/5
 		[HttpGet("{id}")]
-		public async Task<ActionResult<Movie>> GetMovie(int id)
+		public async Task<ActionResult<MovieViewModel>> GetMovie(int id)
 		{
 			var movie = await _context.Movies.FindAsync(id);
 
@@ -46,7 +52,7 @@ namespace Lab2.Controllers
 				return NotFound();
 			}
 
-			return movie;
+			return _mapper.Map<MovieViewModel>(movie);
 		}
 
 		// PUT: api/Movies/5
