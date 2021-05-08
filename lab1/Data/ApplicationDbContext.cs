@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Lab1.ViewModels;
 
 namespace Lab1.Data
 {
@@ -20,7 +19,5 @@ namespace Lab1.Data
             IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)
         {
         }
-
-        public DbSet<Lab1.ViewModels.MovieViewModel> MovieViewModel { get; set; }
     }
 }

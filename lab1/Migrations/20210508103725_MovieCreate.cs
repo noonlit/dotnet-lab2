@@ -20,7 +20,7 @@ namespace Lab1.Migrations
                     ReleaseYear = table.Column<int>(type: "int", nullable: false),
                     Director = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AddedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Rating = table.Column<int>(type: "int", nullable: false),
+                    Rating = table.Column<int>(type: "int", nullable: true),
                     Watched = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
