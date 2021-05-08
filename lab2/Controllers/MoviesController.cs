@@ -24,9 +24,15 @@ namespace Lab2.Controllers
 
 		// GET: api/Movies
 		[HttpGet]
-		public async Task<ActionResult<IEnumerable<Movie>>> GetMovies()
+		public async Task<ActionResult<IEnumerable<Movie>>> GetMovies(string? startDate, string? endDate)
 		{
-			return await _context.Movies.ToListAsync();
+			// the first movie ever made was in 1888, so use this as a default first value
+			var startDateDt = startDate == null ? DateTime.Parse("01-01-1888") : DateTime.Parse(startDate);
+			var endDateDt = endDate == null ? DateTime.Now : DateTime.Parse(endDate);
+
+			return await _context.Movies
+				.Where(m => m.AddedAt >= startDateDt && m.AddedAt <= endDateDt)
+				.OrderByDescending(m => m.ReleaseYear).ToListAsync();
 		}
 
 		// GET: api/Movies/5
