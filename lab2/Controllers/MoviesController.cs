@@ -31,7 +31,7 @@ namespace Lab2.Controllers
 		public async Task<ActionResult<IEnumerable<MovieViewModel>>> GetMovies(string? startDate, string? endDate)
 		{
 			// the first movie ever was made in 1888, so we can use this as a default first value
-			var startDateDt = startDate == null ? DateTime.Parse("01-01-1888") : DateTime.Parse(startDate);
+			var startDateDt = startDate == null ? DateTime.Parse("1888-01-01") : DateTime.Parse(startDate);
 			var endDateDt = endDate == null ? DateTime.Now : DateTime.Parse(endDate);
 
 			var movies = await _context.Movies
