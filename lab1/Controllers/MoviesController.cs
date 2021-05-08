@@ -53,6 +53,11 @@ namespace Lab1.Controllers
 				return BadRequest();
 			}
 
+			if (movie.Rating != null && (movie.Rating < 1 || movie.Rating > 10))
+			{
+				return BadRequest("A rating must be a value between 1 and 10");
+			}
+
 			_context.Entry(movie).State = EntityState.Modified;
 
 			try
@@ -79,6 +84,11 @@ namespace Lab1.Controllers
 		[HttpPost]
 		public async Task<ActionResult<Movie>> PostMovie(Movie movie)
 		{
+			if (movie.Rating != null && (movie.Rating < 1 || movie.Rating > 10))
+			{
+				return BadRequest("A rating must be a value between 1 and 10");
+			}
+
 			_context.Movies.Add(movie);
 			await _context.SaveChangesAsync();
 

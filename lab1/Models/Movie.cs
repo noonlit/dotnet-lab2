@@ -35,8 +35,7 @@ namespace Lab1.Models
 		[Required]
 		public DateTime AddedAt { get; set; }
 
-		[Required, Range(1, 10)]
-		public int Rating { get; set; }
+		public int? Rating { get; set; }
 
 		public bool Watched { get; set; } = false;
 	}
