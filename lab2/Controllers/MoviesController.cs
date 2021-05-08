@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Lab1.Data;
-using Lab1.Models;
+using Lab2.Data;
+using Lab2.Models;
 using Microsoft.AspNetCore.Authorization;
 
-namespace Lab1.Controllers
+namespace Lab2.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]

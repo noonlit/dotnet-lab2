@@ -1,4 +1,4 @@
-export const ApplicationName = 'Lab1';
+export const ApplicationName = 'Lab2';
 
 export const ReturnUrlType = 'returnUrl';
 

@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace Lab1.Models
+namespace Lab2.Models
 {
 	public class Movie
 	{

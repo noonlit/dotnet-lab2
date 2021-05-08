@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Lab1.Migrations
+namespace Lab2.Migrations
 {
     public partial class MovieCreate : Migration
     {

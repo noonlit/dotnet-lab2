@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
-using Lab1.Data;
-using Lab1.Models;
+using Lab2.Data;
+using Lab2.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -16,7 +16,7 @@ using System;
 using System.Reflection;
 using System.IO;
 
-namespace Lab1
+namespace Lab2
 {
 	public class Startup
 	{
