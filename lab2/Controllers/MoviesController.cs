@@ -26,6 +26,19 @@ namespace Lab2.Controllers
 			_mapper = mapper;
 		}
 
+		[HttpGet]
+		[Route("filter/{startDate}_{endDate}")]
+		public ActionResult<IEnumerable<MovieViewModel>> FilterMovies(string startDate, string endDate)
+		{
+			var startDateDt = DateTime.Parse(startDate);
+			var endDateDt   = DateTime.Parse(endDate);
+
+			var movies = _context.Movies.Where(m => m.AddedAt >= startDateDt && m.AddedAt <= endDateDt)
+				.OrderByDescending(m => m.ReleaseYear).ToList();
+
+			return _mapper.Map<List<Movie>, List<MovieViewModel>>(movies);
+		}
+
 		// GET: api/Movies
 		[HttpGet]
 		public async Task<ActionResult<IEnumerable<MovieViewModel>>> GetMovies(string? startDate, string? endDate)
