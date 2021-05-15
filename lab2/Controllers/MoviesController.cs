@@ -54,6 +54,16 @@ namespace Lab2.Controllers
 			return _mapper.Map<List<Movie>, List<MovieViewModel>>(movies);
 		}
 
+		[HttpGet("{id}/Comments")]
+		public ActionResult<IEnumerable<MovieWithCommentsViewModel>> GetCommentsForMovie(int id)
+		{
+			var query = _context.Movies.Where(m => m.Id == id)
+				.Include(m => m.Comments)
+				.Select(m => _mapper.Map<MovieWithCommentsViewModel>(m));
+
+			return query.ToList();
+		}
+
 		// GET: api/Movies/5
 		[HttpGet("{id}")]
 		public async Task<ActionResult<MovieViewModel>> GetMovie(int id)
@@ -104,6 +114,37 @@ namespace Lab2.Controllers
 			return NoContent();
 		}
 
+
+		// PUT: api/Movies/1/Comments/2
+		[HttpPut("{id}/Comments/{commentId}")]
+		public async Task<IActionResult> PutComment(int commentId, Comment comment)
+		{
+			if (commentId != comment.Id)
+			{
+				return BadRequest();
+			}
+
+			_context.Entry(comment).State = EntityState.Modified;
+
+			try
+			{
+				await _context.SaveChangesAsync();
+			}
+			catch (DbUpdateConcurrencyException)
+			{
+				if (!CommentExists(commentId))
+				{
+					return NotFound();
+				}
+				else
+				{
+					throw;
+				}
+			}
+
+			return NoContent();
+		}
+
 		// POST: api/Movies
 		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
 		[HttpPost]
@@ -118,6 +159,25 @@ namespace Lab2.Controllers
 			await _context.SaveChangesAsync();
 
 			return CreatedAtAction("GetMovie", new { id = movie.Id }, movie);
+		}
+
+		[HttpPost("{id}/Comments")]
+		public IActionResult PostCommentForMovie(int id, Comment comment)
+		{
+			var movie = _context.Movies
+				.Where(m => m.Id == id)
+				.Include(m => m.Comments).FirstOrDefault();
+
+			if (movie == null)
+			{
+				return NotFound();
+			}
+
+			movie.Comments.Add(comment);
+			_context.Entry(movie).State = EntityState.Modified;
+			_context.SaveChanges();
+
+			return Ok();
 		}
 
 		// DELETE: api/Movies/5
@@ -136,9 +196,30 @@ namespace Lab2.Controllers
 			return NoContent();
 		}
 
+		// DELETE: api/Movies/1/Comments/5
+		[HttpDelete("{id}/Comments/{commentId}")]
+		public async Task<IActionResult> DeleteComment(int commentId)
+		{
+			var comment = await _context.Comments.FindAsync(commentId);
+			if (comment == null)
+			{
+				return NotFound();
+			}
+
+			_context.Comments.Remove(comment);
+			await _context.SaveChangesAsync();
+
+			return NoContent();
+		}
+
 		private bool MovieExists(int id)
 		{
 			return _context.Movies.Any(e => e.Id == id);
+		}
+
+		private bool CommentExists(int id)
+		{
+			return _context.Comments.Any(e => e.Id == id);
 		}
 	}
 }

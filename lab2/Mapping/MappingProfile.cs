@@ -8,6 +8,8 @@ namespace Lab2.Mapping
     public MappingProfile()
     {
       CreateMap<Movie, MovieViewModel>();
+      CreateMap<Comment, CommentViewModel>();
+      CreateMap<Movie, MovieWithCommentsViewModel>();
     }
   }
 }
